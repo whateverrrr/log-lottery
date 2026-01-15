@@ -2,12 +2,21 @@
 import { Grip } from 'lucide-vue-next'
 import { VueDraggable } from 'vue-draggable-plus'
 import { useI18n } from 'vue-i18n'
+import { ref } from 'vue'
 import EditSeparateDialog from '@/components/NumberSeparate/EditSeparateDialog.vue'
+import EditPrizeItemsDialog from '@/components/PrizeItems/EditPrizeItemsDialog.vue'
 import PageHeader from '@/components/PageHeader/index.vue'
 import { usePrizeConfig } from './usePrizeConfig'
 
-const { addPrize, resetDefault, delAll, delItem, prizeList, currentPrize, selectedPrize, submitData, changePrizePerson, changePrizeStatus, selectPrize, localImageList } = usePrizeConfig()
+const { addPrize, resetDefault, delAll, delItem, prizeList, currentPrize, selectedPrize, submitData, changePrizePerson, changePrizeStatus, selectPrize, localImageList, selectedPrizeForItems, selectPrizeForItems, submitPrizeItems } = usePrizeConfig()
 const { t } = useI18n()
+
+const prizeItemsDialogRef = ref<InstanceType<typeof EditPrizeItemsDialog>>()
+
+function openPrizeItemsDialog(item: any) {
+  selectPrizeForItems(item)
+  prizeItemsDialogRef.value?.openDialog()
+}
 </script>
 
 <template>
@@ -132,6 +141,16 @@ const { t } = useI18n()
         </label>
         <label class="w-full max-w-xs form-control">
           <div class="label">
+            <span class="label-text">{{ t('table.prizeItems') }}</span>
+          </div>
+          <div class="flex gap-2">
+            <button class="btn btn-info btn-xs" @click="openPrizeItemsDialog(item)">
+              {{ item.prizeItems && item.prizeItems.length > 0 ? `${t('button.configItems')} (${item.prizeItems.length})` : t('button.configItems') }}
+            </button>
+          </div>
+        </label>
+        <label class="w-full max-w-xs form-control">
+          <div class="label">
             <span class="label-text">{{ t('table.operation') }}</span>
           </div>
           <div class="flex gap-2">
@@ -143,6 +162,11 @@ const { t } = useI18n()
     <EditSeparateDialog
       :total-number="selectedPrize?.count" :separated-number="selectedPrize?.separateCount.countList"
       @submit-data="submitData"
+    />
+    <EditPrizeItemsDialog
+      ref="prizeItemsDialogRef"
+      :prize-items="selectedPrizeForItems?.prizeItems"
+      @submit-data="submitPrizeItems"
     />
   </div>
 </template>

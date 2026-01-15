@@ -11,6 +11,8 @@ export const dialogEn = {
     uploadFileTitle: 'Upload File',
     uploadImageTitle: 'Upload Image',
     uploadAudioTitle: 'Upload Audio',
+    prizeItemsConfig: 'Prize Items Configuration',
+    noPrizeItems: 'No prize items yet, click "Add Item" to add',
 }
 
 export const dialogZhCn = {
@@ -26,6 +28,8 @@ export const dialogZhCn = {
     uploadFileTitle: '上传文件',
     uploadImageTitle: '上传图片',
     uploadAudioTitle: '上传音频',
+    prizeItemsConfig: '奖品明细配置',
+    noPrizeItems: '暂无奖品明细，点击"添加明细"按钮添加',
 }
 
 export const dialog = {

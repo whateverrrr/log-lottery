@@ -1,4 +1,4 @@
-import type { IPrizeConfig } from '@/types/storeType'
+import type { IPrizeConfig, PrizeItem } from '@/types/storeType'
 import localforage from 'localforage'
 import { cloneDeep } from 'lodash-es'
 import { storeToRefs } from 'pinia'
@@ -21,6 +21,7 @@ export function usePrizeConfig() {
 
     const prizeList = ref(cloneDeep(localPrizeList.value))
     const selectedPrize = ref<IPrizeConfig | null>()
+    const selectedPrizeForItems = ref<IPrizeConfig | null>()
 
     function selectPrize(item: IPrizeConfig) {
         selectedPrize.value = item
@@ -66,6 +67,17 @@ export function usePrizeConfig() {
         selectedPrize.value = null
     }
 
+    function selectPrizeForItems(item: IPrizeConfig) {
+        selectedPrizeForItems.value = item
+    }
+
+    function submitPrizeItems(items: PrizeItem[]) {
+        if (selectedPrizeForItems.value) {
+            selectedPrizeForItems.value.prizeItems = items
+            selectedPrizeForItems.value = null
+        }
+    }
+
     async function getImageDbStore() {
         const keys = await imageDbStore.keys()
         if (keys.length > 0) {
@@ -103,6 +115,7 @@ export function usePrizeConfig() {
             isUsed: false,
             isShow: true,
             frequency: 1,
+            prizeItems: [],
         }
         prizeList.value.push(defaultPrizeCOnfig)
         toast.success(i18n.global.t('error.success'))
@@ -136,5 +149,8 @@ export function usePrizeConfig() {
         changePrizeStatus,
         selectPrize,
         localImageList,
+        selectedPrizeForItems,
+        selectPrizeForItems,
+        submitPrizeItems,
     }
 }

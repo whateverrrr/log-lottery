@@ -14,12 +14,19 @@ export interface IPersonConfig {
     prizeName: string[]
     prizeId: string[]
     prizeTime: string[]
+    prizeItemDetails?: string[]
 }
 export interface Separate {
     id: string
     count: number
     isUsedCount: number
 }
+export interface PrizeItem {
+    id: string
+    name: string
+    quantity: number
+}
+
 export interface IPrizeConfig {
     id: number | string
     name: string
@@ -40,6 +47,7 @@ export interface IPrizeConfig {
     isShow: boolean
     isUsed: boolean
     frequency: number
+    prizeItems?: PrizeItem[]
 }
 export interface IMusic {
     id: string

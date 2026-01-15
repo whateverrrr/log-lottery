@@ -90,7 +90,7 @@ watch ([prizeShow, () => props.temporaryPrizeShow], (val) => {
                 >
               </figure>
               <div class="items-center p-0 card-body">
-                <div class="tooltip tooltip-left w-full pl-1" :data-tip="item.name">
+                <div class="tooltip tooltip-left w-full pl-1" :data-tip="item.prizeItems && item.prizeItems.length > 0 ? `${item.name}: ${item.prizeItems.map(p => `${p.name}×${p.quantity}`).join(', ')}` : item.name">
                   <h2
                     class="w-24 p-0 m-0 overflow-hidden card-title whitespace-nowrap text-ellipsis"
                   >

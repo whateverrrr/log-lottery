@@ -1,7 +1,7 @@
 import type { IPersonConfig } from '@/types/storeType'
 import { rgba } from '@/utils/color'
 
-export function useElementStyle(element: any, person: IPersonConfig, index: number, patternList: number[], patternColor: string, cardColor: string, cardSize: { width: number, height: number }, textSize: number, mod: 'default' | 'lucky' | 'sphere' = 'default', type: 'add' | 'change' = 'add') {
+export function useElementStyle(element: any, person: IPersonConfig, index: number, patternList: number[], patternColor: string, cardColor: string, cardSize: { width: number, height: number }, textSize: number, mod: 'default' | 'lucky' | 'sphere' = 'default', type: 'add' | 'change' = 'add', prizeItemDetail: string = '') {
     if (patternList.includes(index + 1) && mod === 'default') {
         element.style.backgroundColor = rgba(patternColor, Math.random() * 0.2 + 0.8)
     }
@@ -52,7 +52,10 @@ export function useElementStyle(element: any, person: IPersonConfig, index: numb
     element.children[2].style.fontSize = `${textSize * 0.5}px`
     // 设置部门和身份的默认值
     element.children[2].innerHTML = ''
-    if (person.department || person.identity) {
+    if (mod === 'lucky' && prizeItemDetail) {
+        // 中奖模式下显示奖品明细
+        element.children[2].innerHTML = `<span style="color: #ffd700; font-weight: bold; font-size: ${textSize * 0.6}px;">${prizeItemDetail}</span>`
+    } else if (person.department || person.identity) {
         element.children[2].innerHTML = `${person.department ? person.department : ''}<br/>${person.identity ? person.identity : ''}`
     }
     element.children[3].src = person.avatar

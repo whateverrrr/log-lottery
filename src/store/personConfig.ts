@@ -80,7 +80,19 @@ export const usePersonConfig = defineStore('person', () => {
         if (personList.length <= 0) {
             return
         }
-        personList.forEach((person: IPersonConfig) => {
+        
+        // 如果有奖品明细，准备分配逻辑
+        let prizeItemsToAssign: string[] = []
+        if (prize && prize.prizeItems && prize.prizeItems.length > 0) {
+            // 将奖品明细展开成数组，每个奖品按数量重复
+            prize.prizeItems.forEach(item => {
+                for (let i = 0; i < item.quantity; i++) {
+                    prizeItemsToAssign.push(item.name)
+                }
+            })
+        }
+        
+        personList.forEach((person: IPersonConfig, index: number) => {
             personConfig.value.allPersonList.map((item: IPersonConfig) => {
                 if (item.id === person.id && prize != null) {
                     item.isWin = true
@@ -90,6 +102,17 @@ export const usePersonConfig = defineStore('person', () => {
                     item.prizeTime.push(dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss'))
                     // person.prizeTime = new Date().toString()
                     item.prizeId.push(prize.id as string)
+                    
+                    // 分配奖品明细
+                    if (!item.prizeItemDetails) {
+                        item.prizeItemDetails = []
+                    }
+                    if (prizeItemsToAssign.length > 0 && index < prizeItemsToAssign.length) {
+                        item.prizeItemDetails.push(prizeItemsToAssign[index])
+                    } else {
+                        // 如果没有明细或明细不够，就只记录奖项名称
+                        item.prizeItemDetails.push('')
+                    }
                 }
                 return item
             })
@@ -110,6 +133,7 @@ export const usePersonConfig = defineStore('person', () => {
                 personConfig.value.allPersonList[i].prizeName = []
                 personConfig.value.allPersonList[i].prizeTime = []
                 personConfig.value.allPersonList[i].prizeId = []
+                personConfig.value.allPersonList[i].prizeItemDetails = []
                 personDb.updateData('allPersonList', toRaw(personConfig.value.allPersonList[i]))
                 break
             }
@@ -156,6 +180,7 @@ export const usePersonConfig = defineStore('person', () => {
             item.prizeName = []
             item.prizeTime = []
             item.prizeId = []
+            item.prizeItemDetails = []
         })
         personConfig.value.alreadyPersonList = []
         const allPersonListRaw = toRaw(personConfig.value.allPersonList)

@@ -418,6 +418,16 @@ export function useViewModel() {
         canOperate.value = false
         rollBall(0, 1)
 
+        // 准备奖品明细分配
+        let prizeItemsToAssign: string[] = []
+        if (currentPrize.value && currentPrize.value.prizeItems && currentPrize.value.prizeItems.length > 0) {
+            currentPrize.value.prizeItems.forEach(item => {
+                for (let i = 0; i < item.quantity; i++) {
+                    prizeItemsToAssign.push(item.name)
+                }
+            })
+        }
+
         const windowSize = { width: window.innerWidth, height: window.innerHeight }
         luckyTargets.value.forEach((person: IPersonConfig, index: number) => {
             const cardIndex = selectCard(luckyCardList.value, tableData.value.length, person.id)
@@ -425,6 +435,10 @@ export function useViewModel() {
             const totalLuckyCount = luckyTargets.value.length
             const item = objects.value[cardIndex]
             const { xTable, yTable } = useElementPosition(item, rowCount.value, totalLuckyCount, { width: cardSize.value.width * 2, height: cardSize.value.height * 2 }, windowSize, index)
+            
+            // 为当前中奖人分配奖品明细
+            const prizeItemDetail = prizeItemsToAssign.length > 0 && index < prizeItemsToAssign.length ? prizeItemsToAssign[index] : ''
+            
             new TWEEN.Tween(item.position)
                 .to({
                     x: xTable,
@@ -433,7 +447,7 @@ export function useViewModel() {
                 }, 1200)
                 .easing(TWEEN.Easing.Exponential.InOut)
                 .onStart(() => {
-                    item.element = useElementStyle(item.element, person, cardIndex, patternList.value, patternColor.value, luckyColor.value, { width: cardSize.value.width * 2, height: cardSize.value.height * 2 }, textSize.value * 2, 'lucky')
+                    item.element = useElementStyle(item.element, person, cardIndex, patternList.value, patternColor.value, luckyColor.value, { width: cardSize.value.width * 2, height: cardSize.value.height * 2 }, textSize.value * 2, 'lucky', 'add', prizeItemDetail)
                 })
                 .start()
                 .onComplete(() => {

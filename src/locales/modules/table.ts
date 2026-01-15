@@ -26,6 +26,7 @@ export const tableEn = {
     image: 'Image',
     onceNumber: 'Once Number',
     time: 'Time',
+    prizeItems: 'Prize Items',
     // view setting
     title: 'Main Title',
     columnNumber: 'Column Number',
@@ -78,6 +79,7 @@ export const tableZhCn = {
     image: '图片',
     onceNumber: '单次抽取个数',
     time: '时间',
+    prizeItems: '奖品明细',
     // view setting
     title: '主标题',
     columnNumber: '列数',
