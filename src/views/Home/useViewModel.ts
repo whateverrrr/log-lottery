@@ -447,7 +447,7 @@ export function useViewModel() {
                 }, 1200)
                 .easing(TWEEN.Easing.Exponential.InOut)
                 .onStart(() => {
-                    item.element = useElementStyle(item.element, person, cardIndex, patternList.value, patternColor.value, luckyColor.value, { width: cardSize.value.width * 2, height: cardSize.value.height * 2 }, textSize.value * 2, 'lucky', 'add', prizeItemDetail)
+                    item.element = useElementStyle(item.element, person, cardIndex, patternList.value, patternColor.value, luckyColor.value, { width: cardSize.value.width * 2, height: cardSize.value.height * 2 }, textSize.value * 2, 'lucky', 'add', prizeItemDetail, isShowAvatar.value)
                 })
                 .start()
                 .onComplete(() => {

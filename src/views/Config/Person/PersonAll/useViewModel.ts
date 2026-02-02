@@ -142,6 +142,8 @@ export function useViewModel({ exportInputFileRef }: { exportInputFileRef: Ref<H
             // 格式化数组为
             data[i].prizeTime = data[i].prizeTime.join(',')
             data[i].prizeName = data[i].prizeName.join(',')
+            // 添加中奖明细
+            data[i].prizeItemDetails = data[i].prizeItemDetails ? data[i].prizeItemDetails.join(',') : ''
         }
         let dataString = JSON.stringify(data)
         dataString = dataString
@@ -152,6 +154,7 @@ export function useViewModel({ exportInputFileRef }: { exportInputFileRef: Ref<H
             .replaceAll(/identity/g, i18n.global.t('data.identity'))
             .replaceAll(/prizeName/g, i18n.global.t('data.prizeName'))
             .replaceAll(/prizeTime/g, i18n.global.t('data.prizeTime'))
+            .replaceAll(/prizeItemDetails/g, i18n.global.t('data.prizeItemDetails'))
 
         data = JSON.parse(dataString)
 

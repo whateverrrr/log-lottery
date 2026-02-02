@@ -1,7 +1,7 @@
 import type { IPersonConfig } from '@/types/storeType'
 import { rgba } from '@/utils/color'
 
-export function useElementStyle(element: any, person: IPersonConfig, index: number, patternList: number[], patternColor: string, cardColor: string, cardSize: { width: number, height: number }, textSize: number, mod: 'default' | 'lucky' | 'sphere' = 'default', type: 'add' | 'change' = 'add', prizeItemDetail: string = '') {
+export function useElementStyle(element: any, person: IPersonConfig, index: number, patternList: number[], patternColor: string, cardColor: string, cardSize: { width: number, height: number }, textSize: number, mod: 'default' | 'lucky' | 'sphere' = 'default', type: 'add' | 'change' = 'add', prizeItemDetail: string = '', isShowAvatar: boolean = false) {
     if (patternList.includes(index + 1) && mod === 'default') {
         element.style.backgroundColor = rgba(patternColor, Math.random() * 0.2 + 0.8)
     }
@@ -55,10 +55,20 @@ export function useElementStyle(element: any, person: IPersonConfig, index: numb
     if (mod === 'lucky' && prizeItemDetail) {
         // 中奖模式下显示奖品明细
         element.children[2].innerHTML = `<span style="color: #ffd700; font-weight: bold; font-size: ${textSize * 0.6}px;">${prizeItemDetail}</span>`
-    } else if (person.department || person.identity) {
+    } else if (!isShowAvatar && (person.department || person.identity)) {
         element.children[2].innerHTML = `${person.department ? person.department : ''}<br/>${person.identity ? person.identity : ''}`
+    } else if (isShowAvatar && mod === 'lucky' && prizeItemDetail) {
+        // 显示头像时，中奖模式下仍然显示奖品明细
+        element.children[2].style.display = 'block'
+        element.children[2].innerHTML = `<span style="color: #ffd700; font-weight: bold; font-size: ${textSize * 0.6}px;">${prizeItemDetail}</span>`
+    } else if (isShowAvatar && (person.department || person.identity)) {
+        element.children[2].style.display = 'none'
     }
-    element.children[3].src = person.avatar
+    
+    // 处理头像显示
+    if (element.children[3]) {
+        element.children[3].src = person.avatar
+    }
     return element
 }
 
@@ -72,7 +82,7 @@ export function useElementPosition(element: any, count: number, totalCount: numb
     let yTable = 0
     const centerPosition = {
         x: 0,
-        y: windowSize.height / 2 - cardSize.height * 0.9,
+        y: windowSize.height / 3.5,
     }
     // 有一行为偶数的特殊数量
     const specialPosition = [2, 4, 7, 9]
